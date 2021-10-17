@@ -130,6 +130,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+#ignore local database
+server/db.sqlite3
 
 # Ignore PyCharm files
 .idea/
