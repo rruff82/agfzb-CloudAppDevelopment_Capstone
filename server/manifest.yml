@@ -1,11 +1,11 @@
   applications:
-  - name: djangoapp
+  - name: rrr-dealership-app
     routes:
-      - route: $HOST.$DOMAIN
+      - route:  rrr-dealership-app.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
-  - name: djangoapp-nginx
+  - name: rrr-dealership-app-nginx
     routes:
-      - route: $HOST.$DOMAIN/static
+      - route: rrr-dealership-app.mybluemix.net/static
     memory: 128M
     buildpack: staticfile_buildpack
