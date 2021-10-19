@@ -13,22 +13,22 @@ QUERY_FIELDS = ["id", "car_make", "car_model", "car_year",
                 "dealership", "name", "purchase", "purchase_date", 
                 "review"]
     
-def get_query_by_id(id):
-    return {"selector": {"id": {"$eq": id}}, 
+def query_by_id(id):
+    return {"selector": {"id": {"$eq": int(id)}}, 
         "fields": QUERY_FIELDS}  
  
 
 def query_by_dealership(dealer_id):
-    return {
-        "selector": {"dealership": {"$eq": dealer_id}}, 
+    return { 
+        "selector": {"dealership": {"$eq": int(dealer_id)}}, 
         "fields": QUERY_FIELDS}
+
 def query_all():
     return { 
         "selector": {"id": {"$gte": 0}}, 
         "fields": QUERY_FIELDS}    
 
    
-
 def main(params):
     if ("DEALER" in params):
         return {"query": query_by_dealership(params["DEALER"]), "include_docs":True};
@@ -36,5 +36,3 @@ def main(params):
         return {"query": query_by_id(params["ID"]), "include_docs":True};
     else:
         return {"query": query_all(), "include_docs":True};
-
-main({"ID":3})

@@ -27,7 +27,7 @@ function query_by_id(id) {
     return {
         "selector": {
             "id": {
-                "$eq": id
+                "$eq": parseInt(id)
             }
         },
         "fields": QUERY_FIELDS,
