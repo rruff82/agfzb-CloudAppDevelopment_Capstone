@@ -143,3 +143,6 @@ server/djangoapp/migrations/
 *.pyc
 server/djangoapp/migrations/
 
+#creds and temp for cloud functions
+.creds.json
+functions/sample/nodejs/node_modules/
