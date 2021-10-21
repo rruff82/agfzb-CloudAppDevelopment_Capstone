@@ -12,7 +12,7 @@
     <!--Add a nav bar here -->
 {% include "djangoapp/navbar.html" %}
     <!-- Add reviews as cards -->
-    <h1>Reviews for {{dealership.full_name}}</h1> 
+    <h1>Reviews for {{dealer.full_name}}</h1> 
     <div class="card-columns">
         {% for review in reviews %}
             <div class="card">
@@ -24,18 +24,18 @@
                     <div class="card-text">
                         {{review.review}}
                     </div>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'djangoapp:add_review' dealer.id %}">
-                        Add a review for {{dealer.short_name}}
-                    </a>
-                {% endif %}
+
                 </div>
             </div>
         {% endfor %}
 
         
     </div>
-
+                {% if user.is_authenticated %}
+                   <div> <a href="{% url 'djangoapp:add_review' dealer.id %}">
+                        Add a review for {{dealer.short_name}}
+                    </a> </div>
+                {% endif %}
     </body>
 
 </html>

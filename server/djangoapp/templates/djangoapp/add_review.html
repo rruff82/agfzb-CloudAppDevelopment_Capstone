@@ -9,8 +9,48 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 
+  <script type="text/javascript">
+      $('.date-own').datepicker({
+         format: 'mm/dd/yyyy'
+       });
+ </script>    
 </head>
     <body>
+        <h1>Submit review for {{dealer.full_name}}</h1>
     <!--Add review form here -->
+<div class="card mt-1">           
+    <form action="{% url 'djangoapp:add_review' dealer_id%}">
+ 
+     <div class="card-head">Enter the review comment:</div>
+     <div class="card-body">
+<textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+</div>
+
+<div class="form-group">
+    <div class="form-check">
+    <label class="form-check-label">
+        <input type="checkbox" name="purchasecheck"
+            class="form-check-input" id="purchase"
+            value="false">Has purchased the car from {{dealer.short_name}}?
+    </label></div>
+</div>
+
+<div class="form-select">If yes, please select the car:
+<select name="car" id="car" class="form-select" required>
+     {% for car in carmodels %}
+         <option selected value={{car.id}}>{{car.name}}-{{car.make.name}}-{{ car.year|date:"Y" }}</option>
+     {% endfor %}
+</select></div>
+
+
+<div class="form-group">Select your purchase date:
+<input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">
+</div>
+
+
+<button class="btn btn-success btn-block" type="submit">Submit Review</button> 
+
+
+</div></div></form>
     </body>
 </html>
