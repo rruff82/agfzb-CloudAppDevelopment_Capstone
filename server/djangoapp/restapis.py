@@ -2,14 +2,25 @@ import requests
 import json
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-def get_request(url, **kwargs):
+WATSON_NLU_API_URL = os.environ["NATURAL_LANGUAGE_UNDERSTANDING_URL"]
+WATSON_NLU_API_KEY = os.environ["NATURAL_LANGUAGE_UNDERSTANDING_APIKEY"]
+
+def get_request(url, api_key=None,**kwargs):
     print(kwargs)
     print("GET from {} ".format(url))
     try:
         # Call get method of requests library with URL and parameters
-        response = requests.get(url, headers={'Content-Type': 'application/json'},
-                                    params=kwargs)
+        if api_key:
+            response = requests.get(url, params=kwargs, 
+                headers={'Content-Type': 'application/json'},
+                auth=HTTPBasicAuth('apikey',api_key))
+        else:
+            response = requests.get(url, params=kwargs, 
+              headers={'Content-Type': 'application/json'})
     except:
         # If any error occurs
         print("Network exception occurred")
@@ -92,7 +103,7 @@ def get_dealer_reviews_from_cf(url,dealer_id):
                 car_make = review_doc["car_make"],
                 car_model = review_doc["car_model"],
                 car_year = review_doc["car_year"],
-                sentiment = "",
+                sentiment = analyze_review_sentiments(review_doc["review"]),
                 id = review_doc["id"])
             results.append(review_obj)
 
@@ -102,9 +113,20 @@ def get_dealer_reviews_from_cf(url,dealer_id):
 # - Parse JSON results into a DealerView object list
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
-# def analyze_review_sentiments(text):
+def analyze_review_sentiments(dealerreview):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
-
-
+    result = get_request(WATSON_NLU_API_URL+"/v1/analyze?", 
+        version="2021-08-01",
+        api_key=WATSON_NLU_API_KEY,
+        text=dealerreview,
+        features={
+			"keywords": {
+				"sentiment": True,
+				"limit": 1
+			}
+		},
+        return_analyzed_text=True)
+    print(result)
+    return result
 
