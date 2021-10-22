@@ -64,7 +64,7 @@ def get_dealers_from_cf(url, **kwargs):
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
 def get_dealer_by_id_from_cf(url, dealerId):
     results = []
-    json_result = get_request(url+"/dealership?ID="+str(dealerId))
+    json_result = get_request(url+"/dealership",ID=str(dealerId))
     if json_result:
         # Get the row list in JSON as dealers
         dealers = json_result["docs"]
@@ -85,7 +85,7 @@ def get_dealer_by_id_from_cf(url, dealerId):
 def get_dealer_reviews_from_cf(url,dealer_id):
     results = []
     # Call get_request with a URL parameter
-    json_result = get_request(url+"/review?DEALER="+str(dealer_id))
+    json_result = get_request(url+"/review",DEALER=dealer_id)
     if json_result:
         # Get the row list in JSON as dealers
         reviews = json_result["docs"]
@@ -116,17 +116,15 @@ def get_dealer_reviews_from_cf(url,dealer_id):
 def analyze_review_sentiments(dealerreview):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
-    result = get_request(WATSON_NLU_API_URL+"/v1/analyze?", 
+    result = get_request(WATSON_NLU_API_URL+"/v1/analyze", 
         version="2021-08-01",
         api_key=WATSON_NLU_API_KEY,
         text=dealerreview,
         features={
-			"keywords": {
-				"sentiment": True,
-				"limit": 1
-			}
+			"sentiment": True,
 		},
         return_analyzed_text=True)
     print(result)
-    return result
+    print("My label: {}\n".format(result["sentiment"]["document"]["label"]))
+    return result["sentiment"]["document"]["label"]
 
